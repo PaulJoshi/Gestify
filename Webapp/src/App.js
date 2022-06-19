@@ -12,17 +12,20 @@ function App() {
   const canvasRef = useRef(null);
 
   // Main function
-  const runCoco = async () => {
-    // 3. Load network 
-    // e.g. const net = await cocossd.load();
-    // https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json
-    const net = await tf.loadGraphModel('https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json')
-    
-    //  Loop and detect hands
-    setInterval(() => {
-      detect(net);
-    }, 16.7);
-  };
+  useEffect(() => {
+    const runCoco = async () => {
+      // 3. Load network 
+      // e.g. const net = await cocossd.load();
+      // https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json
+      const net = await tf.loadGraphModel('https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json')
+      
+      //  Loop and detect hands
+      setInterval(() => {
+        detect(net);
+      }, 16.7);
+    };
+    runCoco()
+  }, []);
 
   const detect = async (net) => {
     // Check data is available
@@ -72,7 +75,9 @@ function App() {
     }
   };
 
-  useEffect(()=>{runCoco()},[]);
+  //useEffect(() => {
+  //  runCoco()
+  //}, []);
 
   return (
     <div className="App">
