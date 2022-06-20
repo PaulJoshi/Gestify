@@ -14,6 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Herotwo />} />
             <Route path="/Camera" element={<Camera />} />
+            {/* Adding a route wont render the component */}
           </Routes>
         </div>
       </div>
