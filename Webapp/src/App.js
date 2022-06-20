@@ -15,6 +15,7 @@ function App() {
             <Route path="/" element={<Herotwo />} />
             <Route path="/Camera" element={<Camera />} />
             {/* Adding a route wont render the component */}
+            {/* Created a new branch made some changes pushed it then merged it with the main branch */}
           </Routes>
         </div>
       </div>
