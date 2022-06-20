@@ -14,8 +14,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Herotwo />} />
             <Route path="/Camera" element={<Camera />} />
-            {/* <Route path="/Hand" element={<Hand />} />
-            <Route path="/Main" element={<Main />} /> */}
           </Routes>
         </div>
       </div>
