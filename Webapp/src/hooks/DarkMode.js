@@ -8,7 +8,7 @@ const DarkMode = () => {
     const root = window.document.documentElement;
     root.classList.add(theme);
     root.classList.remove(colorTheme);
-  }, [setTheme, colorTheme]);
+  }, [theme, setTheme, colorTheme]);
   return [setTheme, colorTheme];
 };
 
