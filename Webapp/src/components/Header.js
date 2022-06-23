@@ -1,17 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  BsFillMoonFill,
-  BsSunFill,
-  BsFillLightningChargeFill,
-} from "react-icons/bs";
+import { BsFillMoonFill, BsSunFill } from "react-icons/bs";
 import DarkMode from "../hooks/DarkMode";
 
 const Header = () => {
   const [setTheme, colorTheme] = DarkMode();
   return (
-    <div className="container flex items-center py-4 justify-between text-xl  sm:text-lg px-10 dark:bg-dPrimary dark:text-primaryC">
-      <div>
+    <div className="absolute container flex items-center mx-auto left-0 right-0 py-4 justify-between text-xl  sm:text-lg px-10 dark:bg-dPrimary dark:text-primaryC">
+      <div className="">
         <h1 className="font-bold">Gestify.</h1>
       </div>
       <div className="flex items-center">

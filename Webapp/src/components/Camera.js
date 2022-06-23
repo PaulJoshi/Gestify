@@ -91,7 +91,7 @@ function Camera() {
   //}, []);
 
   return (
-    <div className="App">
+    <div className="h-screen pt-40 overflow-hidden">
       <header className="App-header">
         <Webcam
           ref={webcamRef}
