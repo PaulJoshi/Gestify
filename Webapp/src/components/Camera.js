@@ -92,38 +92,40 @@ function Camera() {
 
   return (
     <div className="h-screen pt-40 overflow-hidden">
-      <header className="App-header">
-        <Webcam
-          ref={webcamRef}
-          muted={true}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 640,
-            height: 480,
-          }}
-        />
-
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 8,
-            width: 640,
-            height: 480,
-          }}
-        />
-      </header>
+      {/* <div className="">Loading</div> */}
+      <div>
+        <header className="App-header">
+          <Webcam
+            ref={webcamRef}
+            muted={true}
+            style={{
+              position: "absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              zindex: 9,
+              width: 640,
+              height: 480,
+            }}
+          />
+          <canvas
+            ref={canvasRef}
+            style={{
+              position: "absolute",
+              marginLeft: "auto",
+              marginRight: "auto",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              zindex: 8,
+              width: 640,
+              height: 480,
+            }}
+          />
+        </header>
+      </div>
     </div>
   );
 }
