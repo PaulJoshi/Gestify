@@ -8,22 +8,27 @@ const Header = () => {
   return (
     <div className="absolute container flex items-center mx-auto left-0 right-0 py-4 justify-between text-xl  sm:text-lg px-10 dark:bg-dPrimary dark:text-primaryC">
       <div className="">
-        <h1 className="font-bold">Gestify.</h1>
+        <Link to="/" className="font-bold">
+          Gestify.
+        </Link>
       </div>
       <div className="flex items-center">
-        <a
-          href="https://gestify.netlify.app/"
+        <Link
+          to="/Guide"
           className="cursor-pointer link link-underline link-underline-black"
         >
           Guide
-        </a>
+        </Link>
         <Link
-          to="/about"
+          to="/About"
           className="ml-5 cursor-pointer link link-underline link-underline-black"
         >
           About
         </Link>
-        <div className="pl-20 sm:pl-8" onClick={() => setTheme(colorTheme)}>
+        <div
+          className="cursor-pointer pl-20 sm:pl-8"
+          onClick={() => setTheme(colorTheme)}
+        >
           {colorTheme === "light" ? <BsSunFill /> : <BsFillMoonFill />}
         </div>
       </div>

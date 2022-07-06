@@ -4,6 +4,8 @@ import "./App.css";
 import Herotwo from "./components/Herotwo";
 import Header from "./components/Header";
 import Camera from "./components/Camera";
+import About from "./components/About";
+import Guide from "./components/Guide";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Herotwo />} />
             <Route path="/Camera" element={<Camera />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/Guide" element={<Guide />} />
           </Routes>
         </div>
       </div>
