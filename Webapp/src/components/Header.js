@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { BsFillMoonFill, BsSunFill } from "react-icons/bs";
 import DarkMode from "../hooks/DarkMode";
+import Data from "../data/data.json";
 
 const Header = () => {
   const [setTheme, colorTheme] = DarkMode();
@@ -9,7 +10,7 @@ const Header = () => {
     <div className="absolute container flex items-center mx-auto left-0 right-0 py-4 justify-between text-xl  sm:text-lg px-10 dark:bg-dPrimary dark:text-primaryC">
       <div className="">
         <Link to="/" className="font-bold">
-          Gestify.
+          {Data[0].heading}
         </Link>
       </div>
       <div className="flex items-center">

@@ -1,15 +1,16 @@
 // Import dependencies
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import "../App.css";
 // 2. Import drawing utility here
 // e.g. import { drawRect } from "./utilities";
-import { drawRect } from "../utilities";
+import { drawRect, labelMap } from "../utilities";
 
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const [detection, setDetection] = useState();
 
   // Main function
   useEffect(() => {
@@ -23,13 +24,13 @@ function Camera() {
 
       //  Loop and detect hands
       setInterval(() => {
-        detect(net);
+        Detect(net);
       }, 16.7);
     };
     runCoco();
   }, []);
 
-  const detect = async (net) => {
+  const Detect = async (net) => {
     // Check data is available
     if (
       typeof webcamRef.current !== "undefined" &&
@@ -55,11 +56,18 @@ function Camera() {
       const casted = resized.cast("int32");
       const expanded = casted.expandDims(0);
       const obj = await net.executeAsync(expanded);
-      console.log(obj);
+      //console.log(obj);
 
       const boxes = await obj[1].array();
       const classes = await obj[2].array();
       const scores = await obj[4].array();
+
+      // Update state with detection
+      for(let i=0; i<=boxes.length; i++){
+        if(boxes[0][i] && classes[0][i] && scores[0][i]>0.8)
+          //console.log(classes[0][i]);
+          setDetection(labelMap[classes[0][i]]["name"]);
+      }
 
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
@@ -126,6 +134,9 @@ function Camera() {
           />
         </header>
       </div>
+
+      {/* Display Detection */}
+      <p>{detection}</p>
     </div>
   );
 }
