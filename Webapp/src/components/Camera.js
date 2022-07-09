@@ -17,14 +17,17 @@ function Camera() {
   const takeScreenshot = () => {
     let x = Math.floor(Math.random() * Data[0].frequency);
     console.log(x);
-    if(x === Math.floor(Data[0].frequency/2) && count < Data[0]["max-screenshots"]) {
+    if (
+      x === Math.floor(Data[0].frequency / 2) &&
+      count < Data[0]["max-screenshots"]
+    ) {
       // TODO
       // send ss & detection to firebase
       //console.log(webcamRef.current.getScreenshot());
       console.log("Take Screenshot");
       count++;
     }
-  }
+  };
 
   // Main function
   useEffect(() => {
@@ -42,6 +45,10 @@ function Camera() {
     };
     runCoco();
   });
+
+  setTimeout(() => {
+    setIsDisplayed(false);
+  }, 2000);
 
   const Detect = async (net) => {
     // Check data is available
@@ -76,15 +83,15 @@ function Camera() {
       const scores = await obj[4].array();
 
       // Update state with detection
-      for(let i=0; i<=boxes.length; i++){
-        if(boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
+      for (let i = 0; i <= boxes.length; i++) {
+        if (boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
           //console.log(classes[0][i]);
           setDetection(labelMap[classes[0][i]]["name"]);
 
-          //Generate a random number within 1-20
-          //if number is 10, trigger screenshot
+        //Generate a random number within 1-20
+        //if number is 10, trigger screenshot
 
-          if(consent) takeScreenshot();
+        if (consent) takeScreenshot();
       }
 
       // Draw mesh
@@ -122,10 +129,7 @@ function Camera() {
           muted={true}
           className="absolute w-full"
         />
-        <canvas
-          ref={canvasRef}
-          className="absolute w-full"
-        />
+        <canvas ref={canvasRef} className="absolute w-full" />
       </div>
 
       {/* Display Detection */}
