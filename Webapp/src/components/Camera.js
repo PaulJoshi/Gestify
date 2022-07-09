@@ -10,13 +10,12 @@ import { drawRect, labelMap } from "../utilities";
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-  const [detection, setDetection] = useState();
+  const [detection, setDetection] = useState("Begin");
 
   // Main function
   useEffect(() => {
     const runCoco = async () => {
       // 3. Load network
-      // e.g. const net = await cocossd.load();
       // https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json
       const net = await tf.loadGraphModel(
         "https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json"
@@ -94,49 +93,28 @@ function Camera() {
     }
   };
 
-  //useEffect(() => {
-  //  runCoco()
-  //}, []);
-
   return (
-    <div className="h-screen pt-40 overflow-hidden">
+    <div className="flex md:flex-col w-full h-screen pt-20 overflow-hidden">
       {/* <div className="">Loading</div> */}
-      <div>
-        <header className="App-header">
-          <Webcam
-            ref={webcamRef}
-            muted={true}
-            style={{
-              position: "absolute",
-              marginLeft: "auto",
-              marginRight: "auto",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zindex: 9,
-              width: 640,
-              height: 480,
-            }}
-          />
-          <canvas
-            ref={canvasRef}
-            style={{
-              position: "absolute",
-              marginLeft: "auto",
-              marginRight: "auto",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zindex: 8,
-              width: 640,
-              height: 480,
-            }}
-          />
-        </header>
+      <div className="relative flex-grow md:flex-grow-0 md:h-1/2 bg-gray-800">
+        <Webcam
+          mirrored={true}
+          ref={webcamRef}
+          muted={true}
+          className="absolute w-full"
+        />
+        <canvas
+          ref={canvasRef}
+          className="absolute w-full"
+        />
       </div>
 
       {/* Display Detection */}
-      <p>{detection}</p>
+      <div className="flex w-2/5 md:w-full md:h-1/2 bg-gradient-to-br from-purple-300 via-red-300 to-pink-300">
+        <div className="m-auto">
+          <p className="font-extrabold text-7xl text-center">{detection}</p>
+        </div>
+      </div>
     </div>
   );
 }
