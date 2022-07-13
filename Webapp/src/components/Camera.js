@@ -1,17 +1,30 @@
-// Import dependencies
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
+import useConsentStore from "./Store";
 import "../App.css";
-// 2. Import drawing utility here
-// e.g. import { drawRect } from "./utilities";
+import Data from "../data/data.json";
 import { drawRect, labelMap } from "../utilities";
 
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [detection, setDetection] = useState("Begin");
+  const consent = useConsentStore((state) => state.consent);
   let count = 0;
+  console.log("Consent: " + consent);
+
+  const takeScreenshot = () => {
+    let x = Math.floor(Math.random() * Data[0].frequency);
+    console.log(x);
+    if(x === Math.floor(Data[0].frequency/2) && count < Data[0]["max-screenshots"]) {
+      // TODO
+      // send ss & detection to firebase
+      //console.log(webcamRef.current.getScreenshot());
+      console.log("Take Screenshot");
+      count++;
+    }
+  }
 
   // Main function
   useEffect(() => {
@@ -64,18 +77,14 @@ function Camera() {
 
       // Update state with detection
       for(let i=0; i<=boxes.length; i++){
-        if(boxes[0][i] && classes[0][i] && scores[0][i]>0.8)
+        if(boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
           //console.log(classes[0][i]);
           setDetection(labelMap[classes[0][i]]["name"]);
 
           //Generate a random number within 1-20
           //if number is 10, trigger screenshot
 
-          let x = Math.floor(Math.random() * 20);
-          if(x === 10 && count < 5) {
-            console.log(webcamRef.current.getScreenshot());
-            count++;
-          }
+          if(consent) takeScreenshot();
       }
 
       // Draw mesh
