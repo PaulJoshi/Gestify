@@ -1,13 +1,10 @@
-import  React, { useState } from "react";
+import  React from "react";
 import { Link } from "react-router-dom";
+import useConsentStore from "./Store";
 import Data from "../data/data.json";
 
-const Herotwo = () => {
-  const [consent, setConsent] = useState(false);
-
-  const handleChange = () => {
-    setConsent(!consent);
-  };
+function Herotwo() {
+  const setConsent = useConsentStore((state) => state.setConsent)
 
   return (
     <div className="pt-40 h-screen flex items-center justify-center flex-col">
@@ -36,11 +33,14 @@ const Herotwo = () => {
       <div className="mx-96 pt-48 pb-16 text-center xl:mx-0 xl:px-5 smm:px-10 smm:mx-0">
         <p>{Data[0].disclaimer}</p>
         <label>
+          {Data[0]["consent-text"]}
           <input
+            className="m-3 border-red-300 text-pink-300 rounded shadow-md focus:ring-0"
             type="checkbox"
-            onChange={handleChange}
+            onChange={() => {
+              setConsent();
+            }}
           />
-          Let us record data for training purposes.
         </label>
       </div>
     </div>
