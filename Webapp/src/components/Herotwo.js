@@ -1,8 +1,14 @@
-import React from "react";
+import  React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Data from "../data/data.json";
+
 const Herotwo = () => {
-  console.log({ Data });
+  const [consent, setConsent] = useState(false);
+
+  const handleChange = () => {
+    setConsent(!consent);
+  };
+
   return (
     <div className="pt-40 h-screen flex items-center justify-center flex-col">
       <div className="relative w-full max-w-lg">
@@ -29,6 +35,13 @@ const Herotwo = () => {
       </div>
       <div className="mx-96 pt-48 pb-16 text-center xl:mx-0 xl:px-5 smm:px-10 smm:mx-0">
         <p>{Data[0].disclaimer}</p>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+          />
+          Let us record data for training purposes.
+        </label>
       </div>
     </div>
   );

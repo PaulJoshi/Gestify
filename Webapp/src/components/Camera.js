@@ -11,6 +11,7 @@ function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [detection, setDetection] = useState("Begin");
+  let count = 0;
 
   // Main function
   useEffect(() => {
@@ -66,6 +67,15 @@ function Camera() {
         if(boxes[0][i] && classes[0][i] && scores[0][i]>0.8)
           //console.log(classes[0][i]);
           setDetection(labelMap[classes[0][i]]["name"]);
+
+          //Generate a random number within 1-20
+          //if number is 10, trigger screenshot
+
+          let x = Math.floor(Math.random() * 20);
+          if(x === 10 && count < 5) {
+            console.log(webcamRef.current.getScreenshot());
+            count++;
+          }
       }
 
       // Draw mesh
