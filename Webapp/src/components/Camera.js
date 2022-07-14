@@ -41,7 +41,7 @@ function Camera() {
       }, 16.7);
     };
     runCoco();
-  }, []);
+  });
 
   const Detect = async (net) => {
     // Check data is available
