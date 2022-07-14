@@ -46,10 +46,6 @@ function Camera() {
     runCoco();
   });
 
-  setTimeout(() => {
-    setIsDisplayed(false);
-  }, 2000);
-
   const Detect = async (net) => {
     // Check data is available
     if (
