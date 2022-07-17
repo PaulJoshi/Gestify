@@ -27,7 +27,7 @@ const Header = () => {
           About
         </Link>
         <div
-          className="cursor-pointer pl-20 sm:pl-8"
+          className="cursor-pointer ml-20 sm:pl-8"
           onClick={() => setTheme(colorTheme)}
         >
           {colorTheme === "light" ? <BsSunFill /> : <BsFillMoonFill />}

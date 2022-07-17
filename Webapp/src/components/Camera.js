@@ -5,6 +5,8 @@ import useConsentStore from "./Store";
 import "../App.css";
 import Data from "../data/data.json";
 import { drawRect, labelMap } from "../utilities";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../data/init-firebase";
 
 function Camera() {
   const webcamRef = useRef(null);
@@ -23,8 +25,17 @@ function Camera() {
     ) {
       // TODO
       // send ss & detection to firebase
-      //console.log(webcamRef.current.getScreenshot());
-      console.log("Take Screenshot");
+      // console.log(webcamRef.current.getScreenshot());
+      // console.log("Take Screenshot");
+      let screenshot = webcamRef.current.getScreenshot();
+      const modeldataCollection = collection(db, "modeldata");
+      addDoc(modeldataCollection, { screenshot: screenshot, text: detection })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       count++;
     }
   };
