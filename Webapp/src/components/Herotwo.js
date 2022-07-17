@@ -1,10 +1,10 @@
-import  React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import useConsentStore from "./Store";
 import Data from "../data/data.json";
 
 function Herotwo() {
-  const setConsent = useConsentStore((state) => state.setConsent)
+  const setConsent = useConsentStore((state) => state.setConsent);
 
   return (
     <div className="pt-40 h-screen flex items-center justify-center flex-col">
@@ -45,6 +45,6 @@ function Herotwo() {
       </div>
     </div>
   );
-};
+}
 
 export default Herotwo;

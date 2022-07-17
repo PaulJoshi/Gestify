@@ -5,6 +5,8 @@ import useConsentStore from "./Store";
 import "../App.css";
 import Data from "../data/data.json";
 import { drawRect, labelMap } from "../utilities";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../data/init-firebase";
 
 function Camera() {
   const webcamRef = useRef(null);
@@ -17,14 +19,26 @@ function Camera() {
   const takeScreenshot = () => {
     let x = Math.floor(Math.random() * Data[0].frequency);
     console.log(x);
-    if(x === Math.floor(Data[0].frequency/2) && count < Data[0]["max-screenshots"]) {
+    if (
+      x === Math.floor(Data[0].frequency / 2) &&
+      count < Data[0]["max-screenshots"]
+    ) {
       // TODO
       // send ss & detection to firebase
-      //console.log(webcamRef.current.getScreenshot());
-      console.log("Take Screenshot");
+      // console.log(webcamRef.current.getScreenshot());
+      // console.log("Take Screenshot");
+      let screenshot = webcamRef.current.getScreenshot();
+      const modeldataCollection = collection(db, "modeldata");
+      addDoc(modeldataCollection, { screenshot: screenshot, text: detection })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       count++;
     }
-  }
+  };
 
   // Main function
   useEffect(() => {
@@ -76,15 +90,15 @@ function Camera() {
       const scores = await obj[4].array();
 
       // Update state with detection
-      for(let i=0; i<=boxes.length; i++){
-        if(boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
+      for (let i = 0; i <= boxes.length; i++) {
+        if (boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
           //console.log(classes[0][i]);
           setDetection(labelMap[classes[0][i]]["name"]);
 
-          //Generate a random number within 1-20
-          //if number is 10, trigger screenshot
+        //Generate a random number within 1-20
+        //if number is 10, trigger screenshot
 
-          if(consent) takeScreenshot();
+        if (consent) takeScreenshot();
       }
 
       // Draw mesh
@@ -122,10 +136,7 @@ function Camera() {
           muted={true}
           className="absolute w-full"
         />
-        <canvas
-          ref={canvasRef}
-          className="absolute w-full"
-        />
+        <canvas ref={canvasRef} className="absolute w-full" />
       </div>
 
       {/* Display Detection */}
