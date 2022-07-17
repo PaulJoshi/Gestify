@@ -8,28 +8,27 @@ import { drawRect, labelMap } from "../utilities";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../data/init-firebase";
 
+let count = 0;
+
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [detection, setDetection] = useState("Begin");
   const consent = useConsentStore((state) => state.consent);
-  let count = 0;
-  console.log("Consent: " + consent);
 
-  const takeScreenshot = () => {
+  const takeScreenshot = (sign) => {
     let x = Math.floor(Math.random() * Data[0].frequency);
-    console.log(x);
     if (
       x === Math.floor(Data[0].frequency / 2) &&
       count < Data[0]["max-screenshots"]
     ) {
-      // TODO
-      // send ss & detection to firebase
-      // console.log(webcamRef.current.getScreenshot());
-      // console.log("Take Screenshot");
+      // Take Screenshot
       let screenshot = webcamRef.current.getScreenshot();
+      console.log("Screenshot : " + sign);
+
+      // Send Screenshot & detection to firebase
       const modeldataCollection = collection(db, "modeldata");
-      addDoc(modeldataCollection, { screenshot: screenshot, text: detection })
+      addDoc(modeldataCollection, { screenshot: screenshot, text: sign })
         .then((response) => {
           console.log(response);
         })
@@ -77,41 +76,39 @@ function Camera() {
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
 
-      // 4. Make Detections
+      // Make Detections
       const img = tf.browser.fromPixels(video);
       const resized = tf.image.resizeBilinear(img, [640, 480]);
       const casted = resized.cast("int32");
       const expanded = casted.expandDims(0);
       const obj = await net.executeAsync(expanded);
-      //console.log(obj);
 
       const boxes = await obj[1].array();
       const classes = await obj[2].array();
       const scores = await obj[4].array();
 
-      // Update state with detection
-      for (let i = 0; i <= boxes.length; i++) {
-        if (boxes[0][i] && classes[0][i] && scores[0][i] > 0.8)
-          //console.log(classes[0][i]);
-          setDetection(labelMap[classes[0][i]]["name"]);
+      for (let i = 0; i <= boxes[0].length; i++) {
+        if (boxes[0][i] && classes[0][i] && scores[0][i] > Data[0].accuracy) {
+          // Update state with detection
+          let sign = labelMap[classes[0][i]]["name"]
+          setDetection(sign);
 
-        //Generate a random number within 1-20
-        //if number is 10, trigger screenshot
-
-        if (consent) takeScreenshot();
+          // Take Screenshot
+          if (consent) takeScreenshot(sign);
+        }
       }
 
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
 
-      // 5. Update drawing utility
+      // Update drawing utility
       // drawSomething(obj, ctx)
       requestAnimationFrame(() => {
         drawRect(
           boxes[0],
           classes[0],
           scores[0],
-          0.8,
+          Data[0].accuracy,
           videoWidth,
           videoHeight,
           ctx

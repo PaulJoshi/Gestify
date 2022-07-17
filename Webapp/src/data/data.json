@@ -6,6 +6,7 @@
         "disclaimer": "This app will be using your webcam and machine learning to analyze your handshapes. Everything is processed locally and no webcam data will be sent or stored by default.",
         "consent-text": "Would you like to let us collect data to improve our service?",
         "frequency": 100,
-        "max-screenshots": 5
+        "max-screenshots": 5,
+        "accuracy": 0.85
     }
 ]
