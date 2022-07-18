@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useConsentStore from "./Store";
 import Data from "../data/data.json";
 
-function Herotwo() {
+function Hero() {
   const setConsent = useConsentStore((state) => state.setConsent);
 
   return (
@@ -47,4 +47,4 @@ function Herotwo() {
   );
 }
 
-export default Herotwo;
+export default Hero;

@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Herotwo from "./components/Herotwo";
+import Hero from "./components/Hero";
 import Header from "./components/Header";
 import Camera from "./components/Camera";
 import About from "./components/About";
@@ -15,7 +15,7 @@ function App() {
         <Header />
         <div className="">
           <Routes>
-            <Route path="/" element={<Herotwo />} />
+            <Route path="/" element={<Hero />} />
             <Route path="/Camera" element={<Camera />} />
             <Route path="/About" element={<About />} />
             <Route path="/Guide" element={<Guide />} />
