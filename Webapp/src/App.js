@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
+// import "./App.css";
 import Hero from "./components/Hero";
 import Header from "./components/Header";
 import Camera from "./components/Camera";

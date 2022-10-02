@@ -1,49 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
-import useConsentStore from "./Store";
-import "../App.css";
-import Data from "../data/data.json";
-import { drawRect, labelMap } from "../utilities";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../data/init-firebase";
-
-let count = 0;
+import { labelMap } from "../utilities";
 
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [detection, setDetection] = useState("Begin");
-  const consent = useConsentStore((state) => state.consent);
-
-  const takeScreenshot = (sign) => {
-    let x = Math.floor(Math.random() * Data[0].frequency);
-    if (
-      x === Math.floor(Data[0].frequency / 2) &&
-      count < Data[0]["max-screenshots"]
-    ) {
-      // Take Screenshot
-      let screenshot = webcamRef.current.getScreenshot();
-      console.log("Screenshot : " + sign);
-
-      // Send Screenshot & detection to firebase
-      const modeldataCollection = collection(db, "modeldata");
-      addDoc(modeldataCollection, { screenshot: screenshot, text: sign })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      count++;
-    }
-  };
 
   // Main function
   useEffect(() => {
     const runCoco = async () => {
       // 3. Load network
-      // https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json
       const net = await tf.loadGraphModel(
         "https://tensorflowjsrealtimemodel.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json"
       );
@@ -87,32 +55,33 @@ function Camera() {
       const classes = await obj[2].array();
       const scores = await obj[4].array();
 
-      for (let i = 0; i <= boxes[0].length; i++) {
-        if (boxes[0][i] && classes[0][i] && scores[0][i] > Data[0].accuracy) {
-          // Update state with detection
-          let sign = labelMap[classes[0][i]]["name"]
-          setDetection(sign);
-
-          // Take Screenshot
-          if (consent) takeScreenshot(sign);
-        }
-      }
-
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
 
       // Update drawing utility
       // drawSomething(obj, ctx)
       requestAnimationFrame(() => {
-        drawRect(
-          boxes[0],
-          classes[0],
-          scores[0],
-          Data[0].accuracy,
-          videoWidth,
-          videoHeight,
-          ctx
-        );
+        let text = classes[0][0]
+        let s = scores[0][0]
+
+        if(text && s > 0.95) {
+          // Extract variables
+          const [y, x, height, width] = boxes[0][0]
+          let name = labelMap[text]['name']
+          setDetection(name)
+          
+          // Set styling
+          ctx.strokeStyle = labelMap[text]['color']
+          ctx.lineWidth = 5
+          ctx.fillStyle = 'white'
+          ctx.font = '22px Helvetica'       
+          
+          // DRAW!!
+          ctx.beginPath()
+          ctx.fillText(name + ' - ' + Math.round(s*100)/100, (1-x)*videoWidth, y*videoHeight-10)
+          ctx.rect((1-x)*videoWidth, y*videoHeight, -(width*videoWidth/2), height*videoHeight/1.5);
+          ctx.stroke()
+        }
       });
 
       tf.dispose(img);
@@ -120,12 +89,15 @@ function Camera() {
       tf.dispose(casted);
       tf.dispose(expanded);
       tf.dispose(obj);
+      img.dispose();
+      resized.dispose();
+      casted.dispose();
+      expanded.dispose();
     }
   };
 
   return (
     <div className="flex md:flex-col w-full h-screen pt-20 overflow-hidden">
-      {/* <div className="">Loading</div> */}
       <div className="relative flex-grow md:flex-grow-0 md:h-1/2 bg-gray-800">
         <Webcam
           mirrored={true}
